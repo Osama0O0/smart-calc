@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smart_calc/button_clac.dart';
+import 'package:smart_calc/result_display.dart';
 
 void main() {
   runApp(SmartCalc());
@@ -10,6 +12,7 @@ class SmartCalc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: CalculatorScreen(),
     );
   }
@@ -108,18 +111,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Container(
-              alignment: Alignment.centerRight,
-              padding: EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-              child: Text(
-                _output,
-                style: TextStyle(
-                  fontSize: 72,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            ResultDisplay(output: _output),
             Column(
               children: [
                 Row(
@@ -274,39 +266,4 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       ),
     );
   }
-}
-
-Widget buttonCalc({
-  required String textBtn,
-  required Color color,
-  required Color textColor,
-  required VoidCallback onPressed,
-  bool isZero = false,
-}) {
-  return Container(
-    height: 80,
-    width: isZero ? 172 : 80,
-    margin: EdgeInsets.all(4),
-    decoration: BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.circular(40),
-    ),
-    child: Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(40),
-        onTap: onPressed,
-        child: Center(
-          child: Text(
-            textBtn,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 32,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
 }

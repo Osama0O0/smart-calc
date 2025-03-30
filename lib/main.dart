@@ -30,6 +30,75 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   String _operation = "";
   bool _shouldResetInput = false;
 
+  void _buttonPressed(String buttonText) {
+    setState(() {
+      if (buttonText == "C") {
+        _output = "0";
+        _currentInput = "";
+        _num1 = 0;
+        _num2 = 0;
+        _operation = "";
+      } else if (buttonText == "+/-") {
+        if (_output != "0") {
+          if (_output.startsWith("-")) {
+            _output = _output.substring(1);
+          } else {
+            _output = "-" + _output;
+          }
+        }
+      } else if (buttonText == "%") {
+        _output = (double.parse(_output) / 100).toString();
+        if (_output.endsWith(".0")) {
+          _output = _output.substring(0, _output.length - 2);
+        }
+      } else if (buttonText == "+" ||
+          buttonText == "-" ||
+          buttonText == "×" ||
+          buttonText == "÷") {
+        _num1 = double.parse(_output);
+        _operation = buttonText;
+        _shouldResetInput = true;
+      } else if (buttonText == "=") {
+        if (_operation.isNotEmpty) {
+          _num2 = double.parse(_output);
+
+          switch (_operation) {
+            case "+":
+              _output = (_num1 + _num2).toString();
+              break;
+            case "-":
+              _output = (_num1 - _num2).toString();
+              break;
+            case "×":
+              _output = (_num1 * _num2).toString();
+              break;
+            case "÷":
+              _output = (_num1 / _num2).toString();
+              break;
+          }
+
+          if (_output.endsWith(".0")) {
+            _output = _output.substring(0, _output.length - 2);
+          }
+
+          _operation = "";
+          _shouldResetInput = true;
+        }
+      } else if (buttonText == ".") {
+        if (!_output.contains(".")) {
+          _output += ".";
+        }
+      } else {
+        if (_output == "0" || _shouldResetInput) {
+          _output = buttonText;
+          _shouldResetInput = false;
+        } else {
+          _output += buttonText;
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,145 +114,156 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               child: Text(
                 _output,
                 style: TextStyle(
-                    fontSize: 55,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                  fontSize: 72,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white,
+                ),
               ),
             ),
             Column(
               children: [
                 Row(
                   children: [
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "C",
-                          color: const Color.fromARGB(255, 204, 204, 204),
-                          textColor: Colors.black),
+                    buttonCalc(
+                      textBtn: "C",
+                      color: const Color(0xFFA5A5A5),
+                      textColor: Colors.black,
+                      onPressed: () => _buttonPressed("C"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "+/-",
-                          color: const Color.fromARGB(255, 204, 204, 204),
-                          textColor: Colors.black),
+                    buttonCalc(
+                      textBtn: "+/-",
+                      color: const Color(0xFFA5A5A5),
+                      textColor: Colors.black,
+                      onPressed: () => _buttonPressed("+/-"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "%",
-                          color: const Color.fromARGB(255, 204, 204, 204),
-                          textColor: Colors.black),
+                    buttonCalc(
+                      textBtn: "%",
+                      color: const Color(0xFFA5A5A5),
+                      textColor: Colors.black,
+                      onPressed: () => _buttonPressed("%"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "÷",
-                          color: const Color.fromARGB(255, 240, 143, 52),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "÷",
+                      color: const Color(0xFFFF9F0A),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("÷"),
                     ),
                   ],
                 ),
+                SizedBox(height: 8),
                 Row(
                   children: [
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "7",
-                          color: const Color.fromARGB(255, 63, 63, 63),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "7",
+                      color: const Color(0xFF333333),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("7"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "8",
-                          color: const Color.fromARGB(255, 63, 63, 63),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "8",
+                      color: const Color(0xFF333333),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("8"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "9",
-                          color: const Color.fromARGB(255, 63, 63, 63),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "9",
+                      color: const Color(0xFF333333),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("9"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "×",
-                          color: const Color.fromARGB(255, 240, 143, 52),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "×",
+                      color: const Color(0xFFFF9F0A),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("×"),
                     ),
                   ],
                 ),
+                SizedBox(height: 8),
                 Row(
                   children: [
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "4",
-                          color: const Color.fromARGB(255, 63, 63, 63),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "4",
+                      color: const Color(0xFF333333),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("4"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "5",
-                          color: const Color.fromARGB(255, 63, 63, 63),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "5",
+                      color: const Color(0xFF333333),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("5"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "6",
-                          color: const Color.fromARGB(255, 63, 63, 63),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "6",
+                      color: const Color(0xFF333333),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("6"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "-",
-                          color: const Color.fromARGB(255, 240, 143, 52),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "-",
+                      color: const Color(0xFFFF9F0A),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("-"),
                     ),
                   ],
                 ),
+                SizedBox(height: 8),
                 Row(
                   children: [
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "1",
-                          color: const Color.fromARGB(255, 63, 63, 63),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "1",
+                      color: const Color(0xFF333333),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("1"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "2",
-                          color: const Color.fromARGB(255, 63, 63, 63),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "2",
+                      color: const Color(0xFF333333),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("2"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "3",
-                          color: const Color.fromARGB(255, 63, 63, 63),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "3",
+                      color: const Color(0xFF333333),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("3"),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "+",
-                          color: const Color.fromARGB(255, 240, 143, 52),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: "+",
+                      color: const Color(0xFFFF9F0A),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("+"),
                     ),
                   ],
                 ),
+                SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
                       flex: 2,
-                      child: buttonCalc(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 8),
+                        child: buttonCalc(
                           textBtn: "0",
-                          color: const Color.fromARGB(255, 63, 63, 63),
-                          textColor: Colors.white),
+                          color: const Color(0xFF333333),
+                          textColor: Colors.white,
+                          onPressed: () => _buttonPressed("0"),
+                          isZero: true,
+                        ),
+                      ),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: ".",
-                          color: const Color.fromARGB(255, 63, 63, 63),
-                          textColor: Colors.white),
+                    buttonCalc(
+                      textBtn: ".",
+                      color: const Color(0xFF333333),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("."),
                     ),
-                    Expanded(
-                      child: buttonCalc(
-                          textBtn: "=",
-                          color: const Color.fromARGB(255, 240, 143, 52),
-                          textColor: Colors.black),
+                    buttonCalc(
+                      textBtn: "=",
+                      color: const Color(0xFFFF9F0A),
+                      textColor: Colors.white,
+                      onPressed: () => _buttonPressed("="),
                     ),
                   ],
                 ),
@@ -196,21 +276,37 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 }
 
-Widget buttonCalc(
-    {required String textBtn, required Color color, required Color textColor}) {
+Widget buttonCalc({
+  required String textBtn,
+  required Color color,
+  required Color textColor,
+  required VoidCallback onPressed,
+  bool isZero = false,
+}) {
   return Container(
-      height: 80,
-      width: 80,
-      margin: EdgeInsets.all(5),
-      decoration:
-          BoxDecoration(color: color, borderRadius: BorderRadius.circular(50)),
+    height: 80,
+    width: isZero ? 172 : 80,
+    margin: EdgeInsets.all(4),
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(40),
+    ),
+    child: Material(
+      color: Colors.transparent,
       child: InkWell(
-        onTap: () {},
+        borderRadius: BorderRadius.circular(40),
+        onTap: onPressed,
         child: Center(
-            child: Text(textBtn,
-                style: TextStyle(
-                    color: textColor,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold))),
-      ));
+          child: Text(
+            textBtn,
+            style: TextStyle(
+              color: textColor,
+              fontSize: 32,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }
